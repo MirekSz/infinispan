@@ -7,6 +7,7 @@ import org.infinispan.configuration.cache.ConfigurationBuilder;
 import org.infinispan.configuration.global.GlobalConfiguration;
 import org.infinispan.configuration.global.GlobalConfigurationBuilder;
 import org.infinispan.manager.DefaultCacheManager;
+import org.infinispan.remoting.rpc.RpcManagerImpl;
 import org.infinispan.stats.CacheContainerStats;
 import org.infinispan.stats.ClusterCacheStats;
 
@@ -37,9 +38,12 @@ public class InfinispanMap {
 		CacheContainerStats stats = cacheManager.getStats();
 		ClusterCacheStats component = cache.getAdvancedCache().getComponentRegistry()
 				.getComponent(ClusterCacheStats.class);
+		RpcManagerImpl component2 = (RpcManagerImpl) cache.getAdvancedCache().getComponentRegistry()
+				.getComponent(org.infinispan.remoting.rpc.RpcManager.class);
 		ObjectMapper objectMapper = new ObjectMapper();
 		System.out.println(objectMapper.writeValueAsString(stats));
 		System.out.println(objectMapper.writeValueAsString(component));
+		System.out.println(objectMapper.writeValueAsString(component2.getAverageReplicationTime()));
 		Thread.sleep(10000);
 		cacheManager.stop();
 
